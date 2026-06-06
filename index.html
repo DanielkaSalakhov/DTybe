@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DTybe</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 font-sans">
+
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-2 font-bold text-xl tracking-wider text-indigo-400">
+            <span class="text-2xl"></span> DTybe
+        </div>
+        
+        <div class="w-1/3 flex gap-2">
+            <input 
+                id="search-input"
+                type="text" 
+                placeholder="Введите запрос для поиска..." 
+                class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-indigo-500 transition"
+            />
+            <button id="search-btn" class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer">
+                Найти
+            </button>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3 bg-slate-800/80 px-4 py-1.5 rounded-full border border-slate-700">
+                <span id="timer-display" class="text-sm font-mono text-emerald-400">1:00:00</span>
+                <button id="timer-btn" class="text-xs bg-slate-700 hover:bg-slate-600 px-2.5 py-1 rounded-full transition cursor-pointer">
+                    Старт фокуса
+                </button>
+            </div>
+            
+            <button id="settings-btn" class="text-xl p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-full transition cursor-pointer" title="Настройки API">
+                ⚙️
+            </button>
+        </div>
+    </header>
+
+    <div id="settings-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-semibold text-slate-200">Настройки интеграции</h3>
+                <button id="close-settings" class="text-slate-400 hover:text-slate-200">✕</button>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+                Для работы поиска вставьте ваш личный **YouTube Data API v3 Key**. Он сохраняется только на вашем компьютере в `localStorage`.
+            </p>
+            <div class="space-y-2">
+                <label class="text-xs font-medium text-slate-400">YouTube API Key:</label>
+                <input 
+                    id="api-key-input"
+                    type="password" 
+                    placeholder="AIzaSy..." 
+                    class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500"
+                />
+            </div>
+            <button id="save-settings-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 py-2 rounded-lg text-sm font-medium transition">
+                Сохранить ключ
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <div class="lg:col-span-2 space-y-6">
+            <div class="aspect-video bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-800">
+                <iframe 
+                    id="main-player"
+                    src="https://youtu.be/y75VErslEVQ?si=gfT8t_yVd8zWQm8-" 
+                    class="w-full h-full border-0"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            
+            <div>
+                <h3 class="text-lg font-semibold text-slate-300 mb-4 px-2">Результаты поиска:</h3>
+                <div id="search-results" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <p id="search-placeholder" class="text-slate-500 text-sm px-2">Введите запрос, чтобы найти материалы...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col h-[600px] sticky top-24">
+            <h2 class="text-lg font-medium mb-4 flex items-center gap-2">
+                Заметки
+            </h2>
+            
+            <div class="flex gap-2 mb-4">
+                <input 
+                    id="note-input"
+                    type="text" 
+                    placeholder="Важная мысль из видео..." 
+                    class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500"
+                />
+                <button id="add-note-btn" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 rounded-lg text-sm transition">
+                    ⏱+
+                </button>
+            </div>
+
+            <div id="notes-container" class="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar"></div>
+        </div>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
