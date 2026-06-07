@@ -158,27 +158,64 @@ function renderNotes() {
 addNoteBtn.addEventListener('click', addNote);
 noteInput.addEventListener('keyup', (e) => { if (e.key === 'Enter') addNote(); });
 
+
+const timerMinusBtn = document.getElementById('timer-minus');
+const timerPlusBtn = document.getElementById('timer-plus');
+
+function formatTime(seconds) {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+}
+
+function updateTimerDisplay() {
+    timerDisplay.textContent = formatTime(timerSeconds);
+}
+
+timerMinusBtn.addEventListener('click', () => {
+    if (isTimerRunning) return;
+    if (timerSeconds > 5 * 60) {
+        timerSeconds -= 5 * 60;
+        updateTimerDisplay();
+    }
+});
+
+timerPlusBtn.addEventListener('click', () => {
+    if (isTimerRunning) return;
+    if (timerSeconds < 120 * 60) {
+        timerSeconds += 5 * 60;
+        updateTimerDisplay();
+    }
+});
+
 function toggleTimer() {
     if (isTimerRunning) {
         clearInterval(timerInterval);
-        timerBtn.textContent = 'Старт фокуса';
+        timerBtn.textContent = 'Старт';
         timerBtn.classList.replace('bg-rose-600', 'bg-slate-700');
+        timerMinusBtn.classList.remove('opacity-30', 'pointer-events-none');
+        timerPlusBtn.classList.remove('opacity-30', 'pointer-events-none');
     } else {
         timerBtn.textContent = 'Пауза';
         timerBtn.classList.replace('bg-slate-700', 'bg-rose-600');
+        timerMinusBtn.className += ' opacity-30 pointer-events-none';
+        timerPlusBtn.className += ' opacity-30 pointer-events-none';
         
         timerInterval = setInterval(() => {
             if (timerSeconds > 0) {
                 timerSeconds--;
-                const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
-                const s = (timerSeconds % 60).toString().padStart(2, '0');
-                timerDisplay.textContent = `${m}:${s}`;
+                updateTimerDisplay();
             } else {
                 clearInterval(timerInterval);
                 alert('Время фокуса вышло! Пора отдохнуть.');
-                timerSeconds = 5 * 60;
-                timerDisplay.textContent = "05:00";
-                timerBtn.textContent = 'Старт фокуса';
+                
+                timerSeconds = 25 * 60; 
+                updateTimerDisplay();
+                
+                timerBtn.textContent = 'Старт';
+                timerBtn.classList.replace('bg-rose-600', 'bg-slate-700');
+                timerMinusBtn.classList.remove('opacity-30', 'pointer-events-none');
+                timerPlusBtn.classList.remove('opacity-30', 'pointer-events-none');
             }
         }, 1000);
     }
